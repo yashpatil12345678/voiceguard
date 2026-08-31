@@ -1,2 +1,2 @@
-import { AppShell, EmptyState } from '@/components/app-shell'
-export default function Page(){return <AppShell title="Live Voice Analysis"><div className="mb-8"><div className="mono-label text-primary">PRODUCT PREVIEW</div><h2 className="mt-2 text-2xl font-semibold">Live analysis workspace</h2><p className="mt-2 text-sm text-muted-foreground">The AI analysis pipeline is not connected in Phase 1. This interface is prepared for future session data.</p></div><EmptyState title="Connect your analysis pipeline to begin monitoring" description="Live audio capture, anti-spoofing inference, risk scoring, and verification actions will appear here once the backend is implemented."/></AppShell>}
+import { FoundationPage } from '@/components/foundation-page'
+export default function Page(){return <FoundationPage section="dashboard"/>}
