@@ -1,0 +1,2 @@
+import { ContentPage, securityItems } from '@/components/content-page'
+export default function Page(){return <ContentPage eyebrow="SECURITY & PRIVACY" title="Designed for privacy-conscious deployment." intro="Voice is sensitive. VoiceGuard's frontend foundation makes privacy, access boundaries, and auditability visible parts of the product architecture without claiming controls that are not yet implemented." items={securityItems} cta="View platform foundation"/>}

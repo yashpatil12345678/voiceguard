@@ -1,47 +1,23 @@
-export default function Page() {
-  return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
-  )
-}
+import Link from 'next/link'
+import { Activity, AlertTriangle, ArrowDown, ArrowRight, BadgeCheck, BrainCircuit, Building2, ChevronRight, Eye, Fingerprint, LockKeyhole, Network, ShieldAlert, ShieldCheck, UserRoundCheck, Workflow } from 'lucide-react'
+import { ArrowLink, Footer, Navbar, ProductPreview, RiskBadge, SectionHeading, SignalLine } from '@/components/site-shell'
+
+const features = [
+  ['AI Voice Detection','Detect indicators associated with AI-generated, cloned and manipulated speech.',BrainCircuit],['Real-Time Analysis','Analyze incoming audio continuously in short segments instead of waiting until the call ends.',Activity],['Dynamic Risk Score','Convert multiple signals into an understandable 0–100 impersonation risk score.',ShieldAlert],['Multi-Layer Analysis','Combine acoustic, spectral, prosody, speaker consistency and contextual indicators.',Network],['Real-Time Alerts','Notify users when configurable risk thresholds are crossed.',AlertTriangle],['Secondary Verification','Recommend trusted callback, MFA, supervisor approval or escalation.',UserRoundCheck],
+]
+const solutions = [['Financial Institutions','Protect high-value financial instructions from voice impersonation.','/solutions/banking',Building2],['Enterprises','Protect employees and organizations from executive impersonation.','/solutions/enterprise',ShieldCheck],['Government & Public Organizations','Add a trust layer to sensitive voice communications.','/solutions/government',LockKeyhole],['Contact Centers & Telecom','Detect suspicious voice activity while communication is happening.','/solutions/contact-centers',Network]]
+const steps = [['01','CAPTURE','Receive live or near-live audio.'],['02','ANALYZE','Examine acoustic, spectral and prosodic characteristics.'],['03','DETECT','Identify indicators of synthetic or manipulated speech.'],['04','ASSESS','Fuse signals with context into a dynamic risk score.'],['05','PROTECT','Warn users and recommend secondary verification.']]
+
+function ProcessStrip() { return <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-5">{steps.map(([n,l,d], i) => <div key={n} className="bg-card p-5"><div className="font-mono text-xs text-primary">{n}</div><div className="mt-6 text-sm font-semibold tracking-wide">{l}</div><p className="mt-2 text-xs leading-5 text-muted-foreground">{d}</p>{i < 4 && <ArrowDown className="mt-5 hidden text-primary/60 md:block" size={16} />}</div>)}</div> }
+
+export default function Home() { return <><Navbar /><main>
+  <section className="relative overflow-hidden border-b border-border"><div className="noise absolute inset-0" /><div className="grid-bg absolute inset-0 opacity-30" /><div className="container relative grid gap-16 py-24 md:py-32 lg:grid-cols-[1.05fr_.95fr] lg:items-center"><div><div className="mono-label mb-6 flex items-center gap-2 text-primary"><span className="size-2 rounded-full bg-primary" /> VOICE INTEGRITY / REAL-TIME SECURITY</div><h1 className="max-w-3xl text-balance text-5xl font-semibold leading-[1.02] md:text-7xl">Trust every voice.<br /><span className="text-primary">Verify every call.</span></h1><p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-muted-foreground">AI-powered real-time voice integrity and impersonation protection. Detect suspicious signals, understand the risk, and verify before sensitive actions are taken.</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/live-analysis" className="flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/85">Start Voice Analysis <ArrowRight size={16} /></Link><Link href="/how-it-works" className="flex items-center gap-2 rounded-md border border-border px-5 py-3 text-sm font-semibold text-foreground hover:bg-muted">Explore Platform <ChevronRight size={16} /></Link></div><p className="mt-5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Frontend foundation · AI processing connects in a future phase</p></div><ProductPreview><div className="p-5"><div className="flex items-center justify-between"><div><div className="mono-label">SECURITY DECISION CHAIN</div><p className="mt-2 text-sm text-muted-foreground">From voice signal to protected action</p></div><Fingerprint className="text-primary" size={26} /></div><div className="mt-8 flex flex-col gap-3">{[['VOICE','Incoming audio'],['DETECTION','Signal analysis'],['RISK','Context fusion'],['ALERT','Threshold crossed'],['VERIFICATION','Action protected']].map(([a,b],i)=><div key={a} className="flex items-center gap-3"><div className="flex size-8 items-center justify-center rounded border border-primary/30 bg-primary/10 font-mono text-[10px] text-primary">0{i+1}</div><div className="flex-1"><div className="text-xs font-semibold">{a}</div><div className="text-[11px] text-muted-foreground">{b}</div></div>{i<4 && <ArrowDown size={13} className="text-muted-foreground" />}</div>)}</div></div></ProductPreview></div></section>
+  <section className="section-pad"><div className="container grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center"><SectionHeading eyebrow="THE THREAT" title="Can you really trust the voice on the other end?">AI-generated voices can imitate trusted individuals closely enough to support social-engineering attacks and fraudulent instructions. Caller verification alone may not be sufficient for high-risk conversations.</SectionHeading><div className="card-surface p-6 md:p-8"><div className="flex items-center gap-3 text-danger"><AlertTriangle size={18} /><span className="mono-label text-danger">HIGH-IMPACT MOMENT</span></div><p className="mt-5 text-2xl font-medium leading-9">VoiceGuard adds a security layer that continuously evaluates authenticity and communication risk.</p><div className="mt-8 flex items-center gap-3 font-mono text-xs text-muted-foreground"><span className="text-primary">DETECT</span><ArrowRight size={14} /><span>WARN</span><ArrowRight size={14} /><span>VERIFY</span><ArrowRight size={14} /><span className="text-safe">PROTECT</span></div></div></div></section>
+  <section className="section-pad border-y border-border bg-card/25"><div className="container"><SectionHeading eyebrow="THE METHOD" title="Five layers between a call and a decision">Designed as a real-time decision-support layer, not a binary classifier.</SectionHeading><ProcessStrip /></div></section>
+  <section className="section-pad"><div className="container"><SectionHeading eyebrow="CORE CAPABILITIES" title="Built for the moment a signal becomes a security decision" /><div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{features.map(([title,desc,Icon])=>{const I=Icon as typeof BrainCircuit; return <div key={title as string} className="card-surface group p-6 transition hover:border-primary/50"><I size={22} className="text-primary" /><h3 className="mt-7 text-lg font-semibold">{title as string}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{desc as string}</p><div className="mt-7 flex items-center gap-2 font-mono text-[10px] text-muted-foreground opacity-0 transition group-hover:opacity-100">READY FOR INTEGRATION <ArrowRight size={13} /></div></div>})}</div></div></section>
+  <section className="section-pad border-y border-border bg-card/25"><div className="container"><SectionHeading eyebrow="WHO WE PROTECT" title="Security for every high-stakes conversation" /><div className="mt-12 grid gap-4 md:grid-cols-2">{solutions.map(([title,desc,href,Icon])=>{const I=Icon as typeof Building2; return <Link key={href as string} href={href as string} className="card-surface group p-6 hover:border-primary/50"><I size={22} className="text-primary" /><h3 className="mt-7 text-xl font-semibold">{title as string}</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">{desc as string}</p><div className="mt-8 flex items-center gap-2 text-sm font-semibold text-primary">Explore solution <ArrowRight size={15} className="transition group-hover:translate-x-1" /></div></Link>})}</div></div></section>
+  <section className="section-pad"><div className="container grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:items-start"><SectionHeading eyebrow="INTERFACE PREVIEW" title="Make the risk understandable">A future Live Analysis workspace will connect voice signals, explainability, and recommended action in one view.</SectionHeading><ProductPreview><div className="grid gap-6 p-5 md:grid-cols-[1.2fr_.8fr]"><div><div className="flex items-center justify-between"><span className="mono-label">LIVE ANALYSIS</span><span className="flex items-center gap-2 font-mono text-[10px] text-muted-foreground"><span className="size-2 rounded-full bg-warning" /> AWAITING PIPELINE</span></div><div className="mt-8 flex h-20 items-center gap-1 overflow-hidden border-y border-border">{Array.from({length:55}).map((_,i)=><span key={i} className="voice-line w-1 rounded-full bg-primary/60" style={{height:`${12+(i%7)*7}px`,animationDelay:`${i*35}ms`}} />)}</div><div className="mt-7 flex flex-col gap-4"><SignalLine label="Voice authenticity" value="Pending" /><SignalLine label="Speaker consistency" value="Pending" /><SignalLine label="Contextual risk" value="Pending" /></div></div><div className="flex flex-col justify-between rounded-lg border border-border bg-background p-5"><div><div className="mono-label">0–100 IMPERSONATION RISK</div><div className="mt-5 font-mono text-4xl text-muted-foreground">—</div><p className="mt-2 text-xs leading-5 text-muted-foreground">Connect the analysis pipeline to receive a risk assessment.</p></div><div className="mt-8"><RiskBadge level="LOW" /><p className="mt-2 text-[10px] text-muted-foreground">Thresholds are configurable policies.</p></div></div></div></ProductPreview></div></section>
+  <section className="section-pad border-y border-border bg-card/25"><div className="container grid gap-12 lg:grid-cols-2"><div><SectionHeading eyebrow="PREVENTION CENTER" title="Detecting is not enough. Protect the action.">VoiceGuard is designed to slow down high-risk moments before they become high-impact incidents.</SectionHeading><div className="mt-9 flex flex-wrap items-center gap-3 font-mono text-xs"><span className="text-primary">DETECT</span><ArrowRight size={14}/><span>ALERT</span><ArrowRight size={14}/><span>VERIFY</span><ArrowRight size={14}/><span className="text-safe">PROTECT</span></div></div><div className="grid gap-3 sm:grid-cols-2">{['Trusted Callback','MFA Verification','Supervisor Approval','Pause Sensitive Action','Escalate'].map((x,i)=><div key={x} className="card-surface flex items-center gap-3 p-4"><BadgeCheck size={17} className="text-primary" /><span className="text-sm">{x}</span></div>)}</div></div></section>
+  <section className="section-pad"><div className="container grid gap-12 lg:grid-cols-2"><SectionHeading eyebrow="PRIVACY BY DESIGN" title="Your voice is sensitive. We treat it that way.">Designed for privacy-conscious deployment with minimal raw-audio retention, feature-based logging, secure session processing, role-based access, audit trails, and configurable retention policies.</SectionHeading><div className="grid gap-3 sm:grid-cols-2">{['Minimal raw-audio retention','Feature/result-based logging','Secure session processing','Role-based access','Audit trails','Configurable policies'].map(x=><div key={x} className="flex items-center gap-3 border-b border-border py-4 text-sm"><LockKeyhole size={16} className="text-primary" />{x}</div>)}</div></div></section>
+  <section className="section-pad border-t border-border"><div className="container"><div className="card-surface flex flex-col gap-8 p-8 md:flex-row md:items-center md:justify-between md:p-12"><div><div className="mono-label mb-4 text-primary">NEXT STEP</div><h2 className="text-balance text-3xl font-semibold md:text-5xl">Don&apos;t trust the voice.<br />Verify the risk.</h2><p className="mt-4 max-w-lg text-muted-foreground">Protect high-risk conversations before they become high-impact incidents.</p></div><div className="flex flex-wrap gap-3"><Link href="/live-analysis" className="rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Start Voice Analysis</Link><Link href="/how-it-works" className="rounded-md border border-border px-5 py-3 text-sm font-semibold">View Demo</Link></div></div></div></section>
+</main><Footer /></> }
