@@ -1,2 +1,5 @@
-import { AuthForm } from '@/components/auth-form'
-export default function ForgotPasswordPage() { return <AuthForm reset /> }
+import { PasswordResetRequest } from '@/components/password-reset-request'
+
+export default function ForgotPasswordPage() {
+  return <PasswordResetRequest />
+}
