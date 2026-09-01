@@ -27,5 +27,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL(`/auth/error?message=${message}`, url.origin))
   }
 
-  return NextResponse.redirect(new URL('/auth/verified', url.origin))
+  // The redirect removes token_hash and type from the browser URL while the
+  // server Supabase client persists the verified session in auth cookies.
+  return NextResponse.redirect(new URL('/dashboard', url.origin))
 }
