@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Mic, Square } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/components/auth-provider'
+import { useIdentity } from '@/lib/use-identity'
 
 type Status = 'idle' | 'starting' | 'active' | 'stopping' | 'completed' | 'error'
 
@@ -14,6 +15,7 @@ function getMimeType() {
 
 export function VoiceSessionController() {
   const { user } = useAuth()
+  const { identity, loading: identityLoading, error: identityError } = useIdentity()
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
   const [startedAt, setStartedAt] = useState<Date | null>(null)
@@ -50,6 +52,9 @@ export function VoiceSessionController() {
   const start = useCallback(async () => {
     if (!['idle', 'completed', 'error'].includes(status)) return
     if (!user || !supabase) { setStatus('error'); setMessage('Please sign in before starting VoiceGuard.'); return }
+    if (identityLoading) { setStatus('error'); setMessage('Loading your profile and organization. Please try again.'); return }
+    if (identityError) { setStatus('error'); setMessage(identityError); return }
+    if (!identity?.organizationId) { setStatus('error'); setMessage('Your account is not associated with an organization.'); return }
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') { setStatus('error'); setMessage('This browser does not support microphone recording.'); return }
     const mimeType = getMimeType()
     if (mimeType === null) { setStatus('error'); setMessage('This browser does not support microphone recording.'); return }
@@ -57,10 +62,8 @@ export function VoiceSessionController() {
     let stream: MediaStream
     try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }) } catch { setStatus('error'); setMessage('Microphone permission is required to start VoiceGuard.'); return }
     streamRef.current = stream
-    const { data: profile, error: profileError } = await supabase.from('profiles').select('organization_id').eq('id', user.id).maybeSingle()
-    if (profileError) { release(); setStatus('error'); setMessage('Unable to load your organization profile.'); return }
     const now = new Date()
-    const { data: created, error } = await supabase.from('voice_sessions').insert({ user_id: user.id, organization_id: profile?.organization_id ?? null, started_at: now.toISOString(), status: 'active', communication_channel: 'microphone' }).select('id').single()
+    const { data: created, error } = await supabase.from('voice_sessions').insert({ user_id: identity.userId, organization_id: identity.organizationId, started_at: now.toISOString(), status: 'active', communication_channel: 'microphone' }).select('id').single()
     if (error || !created) { release(); setStatus('error'); setMessage('Unable to create a VoiceGuard session. Please try again.'); return }
     sessionIdRef.current = created.id; startedAtRef.current = now; setStartedAt(now); setElapsed(0); setStatus('active'); setMessage('Microphone active. Audio chunks are prepared for future analysis.')
     const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
@@ -68,7 +71,7 @@ export function VoiceSessionController() {
     recorder.onerror = () => { setMessage('Microphone recording encountered an error. Stopping safely.'); void stop() }
     recorder.start(5000)
     recorderRef.current = recorder
-  }, [release, status, stop, user])
+  }, [identity, identityError, identityLoading, release, status, stop, user])
 
   useEffect(() => { if (status !== 'active' || !startedAt) return; const timer = window.setInterval(() => setElapsed(Math.floor((Date.now() - startedAt.getTime()) / 1000)), 1000); return () => window.clearInterval(timer) }, [startedAt, status])
   useEffect(() => () => release(), [release])

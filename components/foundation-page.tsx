@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle2, Clock3, Filter, Play, Search, ShieldAlert, Squ
 import { AppShell, EmptyState } from './app-shell'
 import { supabase } from '@/lib/supabase/client'
 import { VoiceSessionController } from '@/components/voice-session-controller'
+import { roleLabel, useIdentity } from '@/lib/use-identity'
 
 const sections: Record<string, { title: string; table?: string; description: string }> = {
   sessions: { title: 'Call History', table: 'voice_sessions', description: 'Authenticated session records visible under the current Supabase policies.' },
@@ -33,7 +34,9 @@ export function FoundationPage({ section }: { section: string }) {
   const [count, setCount] = useState<number | null>(null)
   const [loading, setLoading] = useState(Boolean(config.table))
   const [error, setError] = useState('')
+  const { identity, loading: identityLoading, error: identityError } = useIdentity()
   const filtered = useMemo(() => config.title.toLowerCase().includes(query.toLowerCase()) && (filter === 'All' || Boolean(config.table)), [config.title, config.table, filter, query])
+  if (section === 'profile') return <AppShell title="My Profile"><div className="mx-auto max-w-3xl"><div className="mono-label text-primary">AUTHENTICATED IDENTITY</div><h2 className="mt-2 text-3xl font-semibold">My Profile</h2>{identityLoading ? <div className="card-surface mt-8 p-6 text-sm text-muted-foreground">Loading profile…</div> : identityError ? <EmptyState title="Unable to load profile" description={identityError} /> : identity && <div className="card-surface mt-8 grid gap-5 p-6 sm:grid-cols-2"><div><div className="mono-label">FULL NAME</div><p className="mt-2 text-lg">{identity.fullName}</p></div><div><div className="mono-label">EMAIL</div><p className="mt-2 text-lg">{identity.email}</p></div><div><div className="mono-label">ROLE</div><p className="mt-2 text-lg">{roleLabel(identity.role)}</p></div><div><div className="mono-label">ORGANIZATION</div><p className="mt-2 text-lg">{identity.organizationName ?? 'Not associated'}</p></div></div>}</div></AppShell>
 
   useEffect(() => {
     let active = true
