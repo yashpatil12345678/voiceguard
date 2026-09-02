@@ -1,3 +1,6 @@
-import Link from 'next/link'
-import { AppShell, EmptyState } from '@/components/app-shell'
-export default function Page(){return <AppShell title="Organization Dashboard"><div className="mb-8"><div className="mono-label text-primary">FRONTEND FOUNDATION</div><h2 className="mt-2 text-2xl font-semibold">Communication security overview</h2><p className="mt-2 text-sm text-muted-foreground">Connect your analysis pipeline to begin monitoring.</p></div><div className="grid gap-4 md:grid-cols-3">{[['ACTIVE SESSIONS','No voice-analysis sessions yet.','/sessions'],['OPEN ALERTS','Your security events will appear here.','/alerts'],['PIPELINE STATUS','Future integration status.','/integrations']].map(([label,body,href])=><Link key={href} href={href} className="card-surface p-5 transition hover:border-primary"><div className="mono-label">{label}</div><div className="mt-4 text-3xl text-muted-foreground">—</div><p className="mt-2 text-xs text-muted-foreground">{body}</p></Link>)}</div><div className="mt-6"><EmptyState title="No monitoring data yet" description="This dashboard is ready for Supabase-backed sessions, risk events, alerts, and reports in a future phase."/></div></AppShell>}
+import { AppShell } from '@/components/app-shell'
+import { DashboardHome } from '@/components/foundation-page'
+
+export default function Page() {
+  return <AppShell title="Dashboard"><DashboardHome /></AppShell>
+}
