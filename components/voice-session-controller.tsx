@@ -63,6 +63,16 @@ export function VoiceSessionController() {
       const durationSeconds = Math.max(0, Math.round((endedAt.getTime() - startedAt.getTime()) / 1000))
       setElapsed(durationSeconds)
       const error = await updateSession({ ended_at: endedAt.toISOString(), duration_seconds: durationSeconds, final_risk_score: result.risk_score, risk_level: result.risk_level, status: 'analyzed' })
+      await supabase.from('verifications').insert({
+  session_id: sessionIdRef.current,
+  requested_by: user?.id,
+  method: result.risk_level === 'CRITICAL' ? 'security_escalation' : 'risk_review',
+  status: 'pending',
+  requested_at: startedAt.toISOString(),
+  completed_at: endedAt.toISOString(),
+  result: result.risk_level,
+  notes: `AASIST-L risk score: ${result.risk_score.toFixed(1)}. Security action: ${result.security_action}.`
+})
       if (error) {
         console.error('[v0] VoiceGuard result persistence failed', { code: error.code, message: error.message })
         setStatus('error'); setMessage(`Analysis succeeded, but the result could not be saved: ${error.message}`); return
