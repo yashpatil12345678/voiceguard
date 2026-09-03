@@ -30,7 +30,7 @@ export function useIdentity() {
       if (authLoading) return
       if (!user || !supabase) { if (active) { setIdentity(null); setLoading(false) }; return }
       setLoading(true); setError('')
-      const { data: profile, error: profileError } = await supabase.from('profiles').select('id, full_name, email, role, organization_id').eq('id', user.id).maybeSingle()
+      const { data: profile, error: profileError } = await supabase.from('profiles').select('user_id, full_name, email, role, organization_id').eq('user_id', user.id).maybeSingle()
       if (profileError) { if (active) setError(`Profile lookup failed: ${profileError.message}`); setLoading(false); return }
       if (!profile) { if (active) setError('Your user profile could not be found. Please contact your administrator.'); setLoading(false); return }
       let organizationName: string | null = null
