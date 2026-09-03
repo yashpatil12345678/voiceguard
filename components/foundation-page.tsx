@@ -43,7 +43,7 @@ export function FoundationPage({ section }: { section: string }) {
     async function load() {
       if (!config.table) { setLoading(false); return }
       if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
-      const { count: nextCount, error: queryError } = await supabase.from(config.table).select('id', { count: 'exact', head: true })
+      const { count: nextCount, error: queryError } = await supabase.from(config.table).select('*', { count: 'exact', head: true })
       if (!active) return
       if (queryError) setError('Unable to load data. Please try again.')
       else setCount(nextCount ?? 0)

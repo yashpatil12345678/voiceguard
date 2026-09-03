@@ -31,14 +31,23 @@ export function useIdentity() {
       if (!user || !supabase) { if (active) { setIdentity(null); setLoading(false) }; return }
       setLoading(true); setError('')
       const { data: profile, error: profileError } = await supabase.from('profiles').select('user_id, full_name, email, role, organization_id').eq('user_id', user.id).maybeSingle()
-      if (profileError) { if (active) setError(`Profile lookup failed: ${profileError.message}`); setLoading(false); return }
-      if (!profile) { if (active) setError('Your user profile could not be found. Please contact your administrator.'); setLoading(false); return }
+      if (profileError) {
+        console.error('[v0] Profile lookup failed', { code: profileError.code, message: profileError.message })
+        if (active) setError(profileError.code === '42501' ? 'Your authenticated account is not permitted to read its profile.' : `Profile lookup failed: ${profileError.message}`)
+        setLoading(false); return
+      }
+      if (!profile) { if (active) setError(`No profile exists for authenticated user ${user.id}. Complete profile provisioning before using VoiceGuard.`); setLoading(false); return }
+      if (!profile.role) { if (active) setError('Your profile exists, but it has no application role.'); setLoading(false); return }
       let organizationName: string | null = null
       let organizationStatus: string | null = null
       if (profile.organization_id) {
         const { data: organization, error: organizationError } = await supabase.from('organizations').select('organization_id, organization_name, status').eq('organization_id', profile.organization_id).maybeSingle()
-        if (organizationError) { if (active) setError(`Organization lookup failed: ${organizationError.message}`); setLoading(false); return }
-        if (!organization) { if (active) setError('Your organization could not be found. Please contact your administrator.'); setLoading(false); return }
+        if (organizationError) {
+          console.error('[v0] Organization lookup failed', { code: organizationError.code, message: organizationError.message, organizationId: profile.organization_id })
+          if (active) setError(organizationError.code === '42501' ? 'Your profile references an organization, but your account is not permitted to read it.' : `Organization lookup failed: ${organizationError.message}`)
+          setLoading(false); return
+        }
+        if (!organization) { if (active) setError(`Profile organization ${profile.organization_id} does not exist.`); setLoading(false); return }
         organizationName = organization.organization_name ?? null
         organizationStatus = organization.status ?? null
       }
