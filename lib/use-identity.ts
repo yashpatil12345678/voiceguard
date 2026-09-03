@@ -36,10 +36,10 @@ export function useIdentity() {
       let organizationName: string | null = null
       let organizationStatus: string | null = null
       if (profile.organization_id) {
-        const { data: organization, error: organizationError } = await supabase.from('organizations').select('id, name, status').eq('id', profile.organization_id).maybeSingle()
+        const { data: organization, error: organizationError } = await supabase.from('organizations').select('organization_id, organization_name, status').eq('organization_id', profile.organization_id).maybeSingle()
         if (organizationError) { if (active) setError(`Organization lookup failed: ${organizationError.message}`); setLoading(false); return }
         if (!organization) { if (active) setError('Your organization could not be found. Please contact your administrator.'); setLoading(false); return }
-        organizationName = organization.name ?? null
+        organizationName = organization.organization_name ?? null
         organizationStatus = organization.status ?? null
       }
       if (active) { setIdentity({ userId: user.id, email: profile.email ?? user.email ?? '', fullName: profile.full_name ?? user.user_metadata?.full_name ?? user.email ?? 'VoiceGuard user', role: profile.role, organizationId: profile.organization_id, organizationName, organizationStatus }); setLoading(false) }
