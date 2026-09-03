@@ -32,6 +32,11 @@ export async function predictVoice(audio: Blob, signal?: AbortSignal): Promise<V
     throw new Error(`VoiceGuard AI request failed (HTTP ${response.status}).`)
   }
   const result: unknown = await response.json()
-  if (!result || typeof result !== 'object' || !('risk_score' in result) || !('risk_level' in result)) throw new Error('VoiceGuard AI returned an invalid response.')
-  return result as VoiceGuardPrediction
+  if (!result || typeof result !== 'object') throw new Error('VoiceGuard AI returned an invalid response.')
+  const value = result as Record<string, unknown>
+  const requiredNumbers = ['sample_rate', 'input_samples', 'duration_seconds', 'bona_fide_score', 'spoof_score', 'risk_score', 'inference_seconds']
+  if (typeof value.model !== 'string' || typeof value.risk_level !== 'string' || typeof value.security_action !== 'string' || requiredNumbers.some((key) => typeof value[key] !== 'number')) {
+    throw new Error('VoiceGuard AI returned an incomplete response.')
+  }
+  return value as unknown as VoiceGuardPrediction
 }
