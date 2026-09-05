@@ -357,11 +357,16 @@ export function VoiceSessionController() {
 
       try {
         stream =
-          await navigator.mediaDevices.getUserMedia(
-            {
-              audio: true,
-            }
-          )
+  await navigator.mediaDevices.getUserMedia(
+    {
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false,
+        channelCount: 1,
+      },
+    }
+  )
       } catch (error) {
         console.error(
           '[v0] Microphone request failed',
