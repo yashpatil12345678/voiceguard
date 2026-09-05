@@ -11,7 +11,10 @@ export type VoiceGuardPrediction = {
   risk_score: number
   risk_level: RiskLevel
   security_action: SecurityAction | string
-  inference_seconds: number
+    inference_seconds: number
+  audio_rms: number
+  audio_peak: number
+  audio_mean: number
 }
 
 const AI_URL = (process.env.NEXT_PUBLIC_VOICEGUARD_AI_URL ?? 'https://voiceguard-ai-53ow.onrender.com').replace(/\/$/, '')
