@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
+
 export const runtime = 'nodejs'
 
 function escapeHtml(value: string) {
