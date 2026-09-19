@@ -1,5 +1,6 @@
 'use client'
 
+
 import Link from 'next/link'
 import { useState } from 'react'
 import { ArrowRight, Menu, ShieldCheck, X } from 'lucide-react'
